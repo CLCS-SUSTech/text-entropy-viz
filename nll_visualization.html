@@ -1,0 +1,40 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <title>NLL Visualization</title>
+        <style>
+            body { font-family: 'Courier New', monospace; font-size: 16px; line-height: 1.6; margin: 20px; }
+            .token { padding: 2px 4px; margin: 1px; border-radius: 3px; display: inline-block; }
+            .legend { margin: 20px 0; padding: 10px; background: #f5f5f5; border-radius: 5px; }
+            .legend-item { display: inline-block; margin-right: 20px; }
+            .color-box { display: inline-block; width: 20px; height: 20px; margin-right: 5px; border: 1px solid #ccc; }
+        </style>
+    </head>
+    <body>
+        <h2>NLL Visualization</h2>
+        <div class="legend">
+            <div class="legend-item">
+                <span class="color-box" style="background: rgb(0, 255, 0);"></span>
+                <span>Low NLL (Green)</span>
+            </div>
+            <div class="legend-item">
+                <span class="color-box" style="background: rgb(255, 255, 0);"></span>
+                <span>Medium NLL (Yellow)</span>
+            </div>
+            <div class="legend-item">
+                <span class="color-box" style="background: rgb(255, 0, 0);"></span>
+                <span>High NLL (Red)</span>
+            </div>
+        </div>
+        <div style="background: white; padding: 20px; border: 1px solid #ccc; border-radius: 5px;">
+    <span class="token" style="background-color: rgb(255, 62, 0);" title="NLL: 5.9251">P</span><span class="token" style="background-color: rgb(255, 128, 0);" title="NLL: 5.0571">ierre</span><span class="token" style="background-color: rgb(255, 126, 0);" title="NLL: 5.0870">V</span><span class="token" style="background-color: rgb(176, 255, 0);" title="NLL: 2.3353">ink</span><span class="token" style="background-color: rgb(3, 255, 0);" title="NLL: 0.0514">en</span><span class="token" style="background-color: rgb(94, 255, 0);" title="NLL: 1.2578">,</span><span class="token" style="background-color: rgb(84, 255, 0);" title="NLL: 1.1162">61</span><span class="token" style="background-color: rgb(255, 0, 0);" title="NLL: 6.7599">years</span><span class="token" style="background-color: rgb(233, 255, 0);" title="NLL: 3.1020">,</span><span class="token" style="background-color: rgb(112, 255, 0);" title="NLL: 1.4984">will</span><span class="token" style="background-color: rgb(80, 255, 0);" title="NLL: 1.0654">join</span><span class="token" style="background-color: rgb(33, 255, 0);" title="NLL: 0.4425">the</span><span class="token" style="background-color: rgb(52, 255, 0);" title="NLL: 0.6962">board</span><span class="token" style="background-color: rgb(47, 255, 0);" title="NLL: 0.6314">as</span><span class="token" style="background-color: rgb(11, 255, 0);" title="NLL: 0.1507">a</span><span class="token" style="background-color: rgb(5, 255, 0);" title="NLL: 0.0790">non</span><span class="token" style="background-color: rgb(103, 255, 0);" title="NLL: 1.3682">exec</span><span class="token" style="background-color: rgb(0, 255, 0);" title="NLL: 0.0017">utive</span><span class="token" style="background-color: rgb(16, 255, 0);" title="NLL: 0.2191">director</span><span class="token" style="background-color: rgb(160, 255, 0);" title="NLL: 2.1220">Nov</span><span class="token" style="background-color: rgb(2, 255, 0);" title="NLL: 0.0343">.</span><span class="token" style="background-color: rgb(61, 255, 0);" title="NLL: 0.8110">29</span><span class="token" style="background-color: rgb(161, 255, 0);" title="NLL: 2.1458">.</span>
+        </div>
+        <div style="margin-top: 20px; font-size: 12px; color: #666;">
+            <p>NLL Range: 0.0017 to 6.7599</p>
+            <p>Hover over tokens to see exact NLL values</p>
+        </div>
+    </body>
+    </html>
+    
