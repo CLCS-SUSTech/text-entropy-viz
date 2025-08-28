@@ -1,0 +1,40 @@
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="utf-8">
+        <title>NLL Visualization</title>
+        <style>
+            body { font-family: 'Courier New', monospace; font-size: 16px; line-height: 1.6; margin: 20px; }
+            .token { padding: 2px 4px; margin: 1px; border-radius: 3px; display: inline-block; }
+            .legend { margin: 20px 0; padding: 10px; background: #f5f5f5; border-radius: 5px; }
+            .legend-item { display: inline-block; margin-right: 20px; }
+            .color-box { display: inline-block; width: 20px; height: 20px; margin-right: 5px; border: 1px solid #ccc; }
+        </style>
+    </head>
+    <body>
+        <h2>NLL Visualization</h2>
+        <div class="legend">
+            <div class="legend-item">
+                <span class="color-box" style="background: rgb(0, 255, 0);"></span>
+                <span>Low NLL (Green)</span>
+            </div>
+            <div class="legend-item">
+                <span class="color-box" style="background: rgb(255, 255, 0);"></span>
+                <span>Medium NLL (Yellow)</span>
+            </div>
+            <div class="legend-item">
+                <span class="color-box" style="background: rgb(255, 0, 0);"></span>
+                <span>High NLL (Red)</span>
+            </div>
+        </div>
+        <div style="background: white; padding: 20px; border: 1px solid #ccc; border-radius: 5px;">
+    <span class="token" title="NLL: 9.8463 (masked)">Sher</span><span class="token" title="NLL: 2.9393 (masked)">aton</span><span class="token" title="NLL: 12.4979 (masked)">Corp</span><span class="token" title="NLL: 0.5078 (masked)">.</span><span class="token" title="NLL: 3.8896 (masked)">and</span><span class="token" title="NLL: 7.1360 (masked)">Pan</span><span class="token" title="NLL: 1.3587 (masked)">American</span><span class="token" title="NLL: 1.0002 (masked)">World</span><span class="token" title="NLL: 0.0224 (masked)">Airways</span><span class="token" title="NLL: 3.5175 (masked)">announced</span><span class="token" title="NLL: 3.0964 (masked)">that</span><span class="token" title="NLL: 0.7929 (masked)">they</span><span class="token" style="background-color: rgb(188, 255, 0);" title="NLL: 2.2864">had</span><span class="token" style="background-color: rgb(112, 255, 0);" title="NLL: 1.3647">signed</span><span class="token" style="background-color: rgb(49, 255, 0);" title="NLL: 0.6020">a</span><span class="token" style="background-color: rgb(140, 255, 0);" title="NLL: 1.7012">letter</span><span class="token" style="background-color: rgb(1, 255, 0);" title="NLL: 0.0140">of</span><span class="token" style="background-color: rgb(12, 255, 0);" title="NLL: 0.1539">intent</span><span class="token" style="background-color: rgb(56, 255, 0);" title="NLL: 0.6907">to</span><span class="token" style="background-color: rgb(115, 255, 0);" title="NLL: 1.4018">form</span><span class="token" style="background-color: rgb(14, 255, 0);" title="NLL: 0.1809">a</span><span class="token" style="background-color: rgb(62, 255, 0);" title="NLL: 0.7643">joint</span><span class="token" style="background-color: rgb(30, 255, 0);" title="NLL: 0.3739">venture</span><span class="token" style="background-color: rgb(78, 255, 0);" title="NLL: 0.9490">to</span><span class="token" style="background-color: rgb(190, 255, 0);" title="NLL: 2.3155">manage</span><span class="token" style="background-color: rgb(132, 255, 0);" title="NLL: 1.6140">and</span><span class="token" style="background-color: rgb(48, 255, 0);" title="NLL: 0.5863">operate</span><span class="token" style="background-color: rgb(167, 255, 0);" title="NLL: 2.0373">a</span><span class="token" style="background-color: rgb(136, 255, 0);" title="NLL: 1.6625">chain</span><span class="token" style="background-color: rgb(0, 255, 0);" title="NLL: 0.0026">of</span><span class="token" style="background-color: rgb(119, 255, 0);" title="NLL: 1.4550">hotels</span><span class="token" style="background-color: rgb(97, 255, 0);" title="NLL: 1.1867">in</span><span class="token" style="background-color: rgb(71, 255, 0);" title="NLL: 0.8694">the</span><span class="token" style="background-color: rgb(47, 255, 0);" title="NLL: 0.5784">United</span><span class="token" style="background-color: rgb(0, 255, 0);" title="NLL: 0.0041">States</span><span class="token" style="background-color: rgb(75, 255, 0);" title="NLL: 0.9153">and</span><span class="token" style="background-color: rgb(214, 255, 0);" title="NLL: 2.5996">overseas</span><span class="token" style="background-color: rgb(60, 255, 0);" title="NLL: 0.7339">.</span><span class="token" style="background-color: rgb(56, 255, 0);" title="NLL: 0.6823">The</span><span class="token" style="background-color: rgb(168, 255, 0);" title="NLL: 2.0494">new</span><span class="token" style="background-color: rgb(56, 255, 0);" title="NLL: 0.6899">company</span>
+        </div>
+        <div style="margin-top: 20px; font-size: 12px; color: #666;">
+            <p>NLL Range: 0.0010 to 6.1937</p>
+            <p>Hover over tokens to see exact NLL values</p>
+        </div>
+    </body>
+    </html>
+    

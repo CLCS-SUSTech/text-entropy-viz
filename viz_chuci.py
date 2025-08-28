@@ -5,9 +5,9 @@ import matplotlib.pyplot as plt
 from transformers import AutoTokenizer
 from viz import nll_to_rgb
 # %%
-def run_poem_viz_doc(doc_name, text_dir, nll_dir, tokenizer, output_dir='.', global_nll_min=None, global_nll_max=None):
+def run_chuci_viz_doc(doc_name, text_dir, nll_dir, tokenizer, global_nll_min=None, global_nll_max=None):
     """
-    Note: There are multiple lines in poem text file, while only one line in nll file
+    Note: There are multiple lines in chuci text file, while only one line in nll file
     """
     text_file = os.path.join(text_dir, f"{doc_name}.txt")
     nll_file = os.path.join(nll_dir, f"{doc_name}.txt")
@@ -68,12 +68,13 @@ def run_poem_viz_doc(doc_name, text_dir, nll_dir, tokenizer, output_dir='.', glo
     # Tokenize and visualize this line
     token_ids = tokenizer.encode(text_content, add_special_tokens=False)
     tokens = tokenizer.convert_ids_to_tokens(token_ids)
-    tokens_str = [tokenizer.convert_tokens_to_string([token]) for token in tokens]
+    tokens_zh = [tokenizer.convert_tokens_to_string([token]) for token in tokens]
+    # tokens_zh = [tokenizer.decode([token_id]) for token_id in token_ids] # alternative
 
     if len(token_ids) != len(all_nlls):
         print(f"Warning: length mismatch in {doc_name}")
         print(f"token_ids length: {len(token_ids)}, nlls length: {len(all_nlls)}")
-        print(f"tokens_str: {tokens_str}")
+        print(f"tokens_zh: {tokens_zh}")
         return
     
     # Normalize NLL values using global min/max
@@ -85,14 +86,11 @@ def run_poem_viz_doc(doc_name, text_dir, nll_dir, tokenizer, output_dir='.', glo
     # Add sentence to HTML
     combined_html += f'<div class="sentence"><div class="sentence-number">Sentence {1}:</div>'
     
-    for i, (token, nll, norm_nll) in enumerate(zip(tokens_str, all_nlls, normalized_nlls)):
+    for token, nll, norm_nll in zip(tokens_zh, all_nlls, normalized_nlls):
         color = nll_to_rgb(norm_nll)
-        display_token = token
+        display_token = token.replace('▁', ' ').replace('</s>', '').replace('<s>', '').replace('Ġ', '')
         if display_token.strip():
             combined_html += f'<span class="token" style="background-color: {color};" title="NLL: {nll:.4f}">{display_token}</span>'
-        # print(tokens[i], tokens[i].endswith('Ċ')) # debug
-        if tokens[i].endswith('Ċ'):
-            combined_html += '<br>'
     
     combined_html += f'</div>'
     
@@ -102,39 +100,26 @@ def run_poem_viz_doc(doc_name, text_dir, nll_dir, tokenizer, output_dir='.', glo
     """
         
     # Save to file
-    output_file = os.path.join(output_dir, f"{doc_name}_viz.html")
+    output_file = f"{doc_name}_viz.html"
     with open(output_file, 'w', encoding='utf-8') as f:
         f.write(combined_html)
     print(f"Visualization saved to {output_file}")
 
 
 # %%
-def exp_poem():
-    text_dir = 'text_data/poem_Human'
-    nll_dir = 'nll_data/poem_Human'
-    output_dir = 'poem_Human_output'
-    for i in range(0,10):
-        run_poem_viz_doc(f'{i}', text_dir, nll_dir, tokenizer, output_dir=output_dir) 
+def exp_chuci():
+    text_dir = 'text_data/chuci'
+    nll_dir = 'nll_data/chuci_qwen2.5-7b-base'
+    tokenizer_path = '/Users/xy/models/qwen2.5-7b-base'
+    tokenizer = AutoTokenizer.from_pretrained(tokenizer_path, use_fast=True)
 
-    text_dir = 'text_data/poem_ChatGPT'
-    nll_dir = 'nll_data/poem_ChatGPT'
-    output_dir = 'poem_ChatGPT_output'
-    for i in range(0,10):
-        run_poem_viz_doc(f'{i}', text_dir, nll_dir, tokenizer, output_dir=output_dir)
-
-    text_dir = 'text_data/poem_Tulu2'
-    nll_dir = 'nll_data/poem_Tulu2'
-    output_dir = 'poem_Tulu2_output'
-    for i in range(0,10):
-        run_poem_viz_doc(f'{i}', text_dir, nll_dir, tokenizer, output_dir=output_dir)
+    run_chuci_viz_doc("0", text_dir, nll_dir, tokenizer)
+    for i in range(1, 11):
+        run_chuci_viz_doc(f"{i}", text_dir, nll_dir, tokenizer)
 
 
 # %%
 # Test the visualization
 if __name__ == "__main__":
-    # Load tokenizer
-    model_path = '/Users/xy/models/llama3-8b-base'
-    tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast=True)
-    
-    # Experiment with Poem
-    exp_poem()
+    # Experiment with Chuci
+    exp_chuci()
