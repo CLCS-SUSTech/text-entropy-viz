@@ -5,9 +5,19 @@ import matplotlib.pyplot as plt
 from transformers import AutoTokenizer
 from viz import nll_to_rgb
 # %%
-def run_poem_viz_doc(doc_name, text_dir, nll_dir, tokenizer, output_dir='.', global_nll_min=None, global_nll_max=None):
+def run_poem_viz_doc(doc_name, text_dir, nll_dir, tokenizer, output_dir='.', output_file=None, global_nll_min=None, global_nll_max=None, masked_positions=None):
     """
     Note: There are multiple lines in poem text file, while only one line in nll file
+    
+    Args:
+        doc_name: document name
+        text_dir: directory containing text files
+        nll_dir: directory containing NLL files
+        tokenizer: tokenizer object
+        output_dir: output directory for HTML files
+        global_nll_min: float, optional global minimum NLL value for normalization
+        global_nll_max: float, optional global maximum NLL value for normalization
+        masked_positions: list of int, optional positions to mask in the text, which will not be colored
     """
     text_file = os.path.join(text_dir, f"{doc_name}.txt")
     nll_file = os.path.join(nll_dir, f"{doc_name}.txt")
@@ -86,10 +96,16 @@ def run_poem_viz_doc(doc_name, text_dir, nll_dir, tokenizer, output_dir='.', glo
     combined_html += f'<div class="sentence"><div class="sentence-number">Sentence {1}:</div>'
     
     for i, (token, nll, norm_nll) in enumerate(zip(tokens_str, all_nlls, normalized_nlls)):
-        color = nll_to_rgb(norm_nll)
         display_token = token
         if display_token.strip():
-            combined_html += f'<span class="token" style="background-color: {color};" title="NLL: {nll:.4f}">{display_token}</span>'
+            # Check if position should be masked
+            if masked_positions is not None and i in masked_positions:
+                # Don't color masked positions
+                combined_html += f'<span class="token" title="NLL: {nll:.4f} (masked)">{display_token}</span>'
+            else:
+                # Color non-masked positions
+                color = nll_to_rgb(norm_nll)
+                combined_html += f'<span class="token" style="background-color: {color};" title="NLL: {nll:.4f}">{display_token}</span>'
         # print(tokens[i], tokens[i].endswith('Ċ')) # debug
         if tokens[i].endswith('Ċ'):
             combined_html += '<br>'
@@ -102,7 +118,10 @@ def run_poem_viz_doc(doc_name, text_dir, nll_dir, tokenizer, output_dir='.', glo
     """
         
     # Save to file
-    output_file = os.path.join(output_dir, f"{doc_name}_viz.html")
+    if output_file is None:
+        output_file = os.path.join(output_dir, f"{doc_name}_viz.html")
+    else:
+        output_file = os.path.join(output_dir, output_file)
     with open(output_file, 'w', encoding='utf-8') as f:
         f.write(combined_html)
     print(f"Visualization saved to {output_file}")
@@ -130,6 +149,60 @@ def exp_poem():
 
 
 # %%
+def exp_poem_mask():
+    # Experiment with 1.txt for Human, ChatGPT, Tulu2
+    # masking the first line in the final viz
+    # and using the NLLs from the unmasked tokens to compute the global min and max
+    
+    # Load data for all three sources
+    text_dir_human = 'text_data/poem_Human'
+    nll_dir_human = 'nll_data/poem_Human'
+    text_dir_chatgpt = 'text_data/poem_ChatGPT'
+    nll_dir_chatgpt = 'nll_data/poem_ChatGPT'
+    text_dir_tulu2 = 'text_data/poem_Tulu2'
+    nll_dir_tulu2 = 'nll_data/poem_Tulu2'
+    
+    # Read NLL data for computing global range
+    with open(os.path.join(nll_dir_human, '1.txt'), 'r') as f:
+        nll_human = np.array(list(map(float, f.read().strip().split())))
+    
+    with open(os.path.join(nll_dir_chatgpt, '1.txt'), 'r') as f:
+        nll_chatgpt = np.array(list(map(float, f.read().strip().split())))
+    
+    with open(os.path.join(nll_dir_tulu2, '1.txt'), 'r') as f:
+        nll_tulu2 = np.array(list(map(float, f.read().strip().split())))
+    
+    # Define masked positions (first line tokens)
+    masked_positions = np.array(list(range(0, 10)), dtype=np.int32)
+    
+    # Compute global min/max excluding masked positions
+    global_nll_min = np.min(np.concatenate([
+        nll_human[~masked_positions], 
+        nll_chatgpt[~masked_positions], 
+        nll_tulu2[~masked_positions]
+    ]))
+    global_nll_max = np.max(np.concatenate([
+        nll_human[~masked_positions], 
+        nll_chatgpt[~masked_positions], 
+        nll_tulu2[~masked_positions]
+    ]))
+    
+    print(f"Global NLL range (excluding masked): {global_nll_min:.4f} to {global_nll_max:.4f}")
+    
+    # Create output directories
+    output_dir = 'poem_output_masked'
+    os.makedirs(output_dir, exist_ok=True)
+    
+    # Generate visualizations with masking
+    run_poem_viz_doc('1', text_dir_human, nll_dir_human, tokenizer, 
+                     output_dir, '1_Human_viz.html', global_nll_min, global_nll_max, masked_positions)
+    run_poem_viz_doc('1', text_dir_chatgpt, nll_dir_chatgpt, tokenizer, 
+                     output_dir, '1_ChatGPT_viz.html', global_nll_min, global_nll_max, masked_positions)
+    run_poem_viz_doc('1', text_dir_tulu2, nll_dir_tulu2, tokenizer, 
+                     output_dir, '1_Tulu2_viz.html', global_nll_min, global_nll_max, masked_positions)
+
+
+# %%
 # Test the visualization
 if __name__ == "__main__":
     # Load tokenizer
@@ -137,4 +210,7 @@ if __name__ == "__main__":
     tokenizer = AutoTokenizer.from_pretrained(model_path, use_fast=True)
     
     # Experiment with Poem
-    exp_poem()
+    # exp_poem()
+    
+    # Experiment with Poem with masking
+    exp_poem_mask()
